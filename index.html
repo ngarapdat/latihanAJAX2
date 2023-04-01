@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Ajax</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class class="pokemon">
+        <div class="pokemon">
+            <h3>Get 36 Pokemon</h3>
+            <button id="btn">Get</button>
+            <div id="data" class="data">
+            </div>
+        </div>
+</div>
+<script>
+    const btn = document.getElementById("btn");
+const dataDiv = document.getElementById("data");
+
+btn.addEventListener("click", () => {
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=36")
+        .then(response => response.json())
+        .then(data => {
+            let pokemonData = '';
+            data.results.forEach(pokemon => {
+                fetch(pokemon.url)
+                    .then(response => response.json())
+                    .then(pokemonData => {
+                        const types = pokemonData.types.map(type => type.type.name);
+                        const typeClass = types.join(' '); // Menggabungkan nama tipe pokemon menjadi satu string
+                        pokemonData = `
+                            <div class="pokemon-card ${typeClass}">
+                                <p>${pokemonData.name}</p>
+                                <img src="${pokemonData.sprites.front_default}" alt="${pokemonData.name}">
+                                <p>Type: ${types.join(', ')}</p>
+                            </div>
+                        `;
+                        dataDiv.insertAdjacentHTML('beforeend', pokemonData);
+                    });
+            });
+        })
+        .catch(error => console.error(error));
+});
+
+</script>
+</body>
+        
+
+
+</html>
